@@ -1,5 +1,7 @@
 package wordlegameengine
 
+import "math/rand/v2"
+
 const MaxGuesses = 6
 
 type Game struct {
@@ -14,6 +16,12 @@ func NewGame(solution Solution) *Game {
 		Guesses:   make([]Word, 0, MaxGuesses),
 		Feedbacks: make([]Feedback, 0, MaxGuesses),
 	}
+}
+
+func NewRandomGame() *Game {
+	idx := rand.IntN(len(AllowedSolutions))
+	solution := Solution(AllowedSolutions[idx])
+	return NewGame(solution)
 }
 
 func (g *Game) AddGuess(guess Word) {
