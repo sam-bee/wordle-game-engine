@@ -9,21 +9,23 @@ const WordLength = 5
 
 type Word [WordLength]byte
 
-var ErrInvalidLength = fmt.Errorf("word must be %d letters", WordLength)
-var ErrInvalidCharacter = fmt.Errorf("word must contain only lowercase a-z")
-var ErrNotInWordlist = fmt.Errorf("word not in allowed guesses")
+func errInvalidLength(s string) error {
+	return fmt.Errorf("%q must be %d letters", s, WordLength)
+}
+
+func errInvalidCharacter(s string) error {
+	return fmt.Errorf("%q must contain only lowercase a-z", s)
+}
+
+func errNotInWordlist(s string) error {
+	return fmt.Errorf("%q not in allowed guesses", s)
+}
 
 func NewWord(s string) (Word, error) {
-	if len(s) != WordLength {
-		return Word{}, ErrInvalidLength
-	}
-	for i := 0; i < len(s); i++ {
-		if s[i] < 'a' || s[i] > 'z' {
-			return Word{}, ErrInvalidCharacter
-		}
-	}
 	var w Word
-	copy(w[:], s)
+	if err := parseWord(s, w[:]); err != nil {
+		return Word{}, err
+	}
 	return w, nil
 }
 
@@ -32,19 +34,41 @@ func (w Word) String() string {
 }
 
 func (w *Word) Validate() error {
-	for i := 0; i < WordLength; i++ {
-		if w[i] < 'a' || w[i] > 'z' {
-			return ErrInvalidCharacter
+	s := w.String()
+	if err := validateCharacters(s); err != nil {
+		return err
+	}
+	if !isInWordlist(s, AllowedGuesses) {
+		return errNotInWordlist(s)
+	}
+	return nil
+}
+
+func parseWord(s string, dest []byte) error {
+	if len(s) != WordLength {
+		return errInvalidLength(s)
+	}
+	for i := 0; i < len(s); i++ {
+		if s[i] < 'a' || s[i] > 'z' {
+			return errInvalidCharacter(s)
 		}
 	}
+	copy(dest, s)
+	return nil
+}
 
-	s := w.String()
-	idx := sort.Search(len(AllowedGuesses), func(i int) bool {
-		return AllowedGuesses[i].String() >= s
-	})
-
-	if idx < len(AllowedGuesses) && AllowedGuesses[idx].String() == s {
-		return nil
+func validateCharacters(s string) error {
+	for i := 0; i < len(s); i++ {
+		if s[i] < 'a' || s[i] > 'z' {
+			return errInvalidCharacter(s)
+		}
 	}
-	return ErrNotInWordlist
+	return nil
+}
+
+func isInWordlist(s string, wordlist []Word) bool {
+	idx := sort.Search(len(wordlist), func(i int) bool {
+		return wordlist[i].String() >= s
+	})
+	return idx < len(wordlist) && wordlist[idx].String() == s
 }

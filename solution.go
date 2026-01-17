@@ -1,6 +1,35 @@
 package wordlegameengine
 
+import "fmt"
+
 type Solution Word
+
+func errNotInSolutions(s string) error {
+	return fmt.Errorf("%q not in allowed solutions", s)
+}
+
+func NewSolution(s string) (Solution, error) {
+	var sol Solution
+	if err := parseWord(s, sol[:]); err != nil {
+		return Solution{}, err
+	}
+	return sol, nil
+}
+
+func (s Solution) String() string {
+	return string(s[:])
+}
+
+func (s *Solution) Validate() error {
+	str := s.String()
+	if err := validateCharacters(str); err != nil {
+		return err
+	}
+	if !isInWordlist(str, AllowedSolutions) {
+		return errNotInSolutions(str)
+	}
+	return nil
+}
 
 type TileColor int8
 
