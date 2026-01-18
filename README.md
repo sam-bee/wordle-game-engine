@@ -18,8 +18,9 @@ The repo contains wordlists needed for playing Wordle.
 - **Bundled wordlists**
   - Includes a **solutions** list and a **valid guesses** list (Wordle-style: solutions ⊂ valid guesses)
   - Helpers to load/access these lists without extra dependencies
-- **Deterministic, testable API**
-  - No randomness, no I/O required (wordlists embedded)
+- **Testable API**
+  - Wordlists loaded from `./data/` directory via `LoadWordlists()`
+  - Optional `NewRandomGame()` for random solution selection
 - **Minimal surface area**
   - Easy to wrap in an RL environment (gym-style step/reset) without mixing concerns
 
@@ -31,7 +32,7 @@ The repo contains wordlists needed for playing Wordle.
 - Scoring logic (grey/yellow/green)
 - A `Game` type to track attempts and feedback
 - **Wordlists** for solutions and allowed guesses
-- Small helpers for picking a solution (optionally deterministic via seeded RNG you provide)
+- `NewRandomGame()` helper for picking a random solution
 
 ### Not included
 - Solver / strategy code
@@ -44,11 +45,12 @@ The repo contains wordlists needed for playing Wordle.
 ## Installation
 
 ```bash
-go get github.com/sam-bee/wordle-game-logic
+go get github.com/sam-bee/wordle-game-engine
 ```
 
-Core concepts
-Tile feedback
+## Core concepts
+
+### Tile feedback
 
 A guess is scored into a slice of tiles, one per letter:
 
@@ -64,7 +66,7 @@ Allocate greens for exact matches.
 
 For remaining letters, allocate yellows only while the solution still has unmatched counts of that letter; otherwise grey.
 
-# Wordlists
+### Wordlists
 
 This repo includes two lists:
 
