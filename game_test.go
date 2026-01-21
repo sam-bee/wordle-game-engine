@@ -164,6 +164,39 @@ func TestGame_Won(t *testing.T) {
 	})
 }
 
+func TestGame_SolutionShortlist_Smoke(t *testing.T) {
+	// Set up a game with solution "spare" and a pre-filtered shortlist
+	game := &Game{
+		Solution:  mustNewSolution("spare"),
+		Guesses:   []Word{mustNewWord("scare")},
+		Feedbacks: []Feedback{{Green, Grey, Green, Green, Green}},
+		SolutionShortlist: []Word{
+			mustNewWord("scare"),
+			mustNewWord("share"),
+			mustNewWord("snare"),
+			mustNewWord("spare"),
+			mustNewWord("stare"),
+		},
+	}
+
+	// Play "chant" - should get grey-grey-green-grey-grey against "spare"
+	game.PlayGuess(mustNewWord("chant"))
+
+	expectedFeedback := Feedback{Grey, Grey, Green, Grey, Grey}
+	if game.Feedbacks[1] != expectedFeedback {
+		t.Errorf("feedback for 'chant' = %v, want %v", game.Feedbacks[1], expectedFeedback)
+	}
+
+	// Only "spare" should remain in shortlist - it's the only word where
+	// "chant" produces grey-grey-green-grey-grey
+	if len(game.SolutionShortlist) != 1 {
+		t.Errorf("SolutionShortlist length = %d, want 1", len(game.SolutionShortlist))
+	}
+	if len(game.SolutionShortlist) > 0 && game.SolutionShortlist[0] != mustNewWord("spare") {
+		t.Errorf("SolutionShortlist[0] = %v, want 'spare'", game.SolutionShortlist[0])
+	}
+}
+
 func mustNewSolution(s string) Solution {
 	sol, err := NewSolution(s)
 	if err != nil {
