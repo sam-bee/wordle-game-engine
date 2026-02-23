@@ -14,15 +14,12 @@ The repo contains wordlists needed for playing Wordle.
   - Represent a game-in-progress (solution + guess history + feedback history)
   - Evaluate a guess against the hidden solution
 - **Correct duplicate-letter scoring**
-  - Matches Wordle behavior for repeated letters (greens allocated first, then yellows up to remaining counts)
+  - Matches Wordle behaviour for repeated letters (greens allocated first, then yellows up to remaining counts)
 - **Bundled wordlists**
   - Includes a **solutions** list and a **valid guesses** list (Wordle-style: solutions ⊂ valid guesses)
   - Helpers to load/access these lists without extra dependencies
 - **Testable API**
-  - Wordlists loaded from `./data/` directory via `LoadWordlists()`
-  - Optional `NewRandomGame()` for random solution selection
-- **Minimal surface area**
-  - Easy to wrap in an RL environment (gym-style step/reset) without mixing concerns
+  - Wordlists loaded from `./data/` directory
 
 ---
 
@@ -32,21 +29,13 @@ The repo contains wordlists needed for playing Wordle.
 - Scoring logic (grey/yellow/green)
 - A `Game` type to track attempts and feedback
 - **Wordlists** for solutions and allowed guesses
-- `NewRandomGame()` helper for picking a random solution
 
 ### Not included
 - Solver / strategy code
 - UI rendering
-- Networked 'daily Wordle' behavior
-- Opinionated RL reward shaping
+- Anything to do with reinforcement learning, directly.
 
 ---
-
-## Installation
-
-```bash
-go get github.com/sam-bee/wordle-game-engine
-```
 
 ## Core concepts
 
@@ -89,4 +78,4 @@ Regression fixtures (table-driven tests)
 
 ## End with 'Why'
 
-For reinforcement learning.
+For a reinforcement learning project, in which a machine learning model will be produced that can play Wordle well.
