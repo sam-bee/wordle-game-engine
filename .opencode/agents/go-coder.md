@@ -12,6 +12,8 @@ permission:
 
 You are an expert Go developer maintaining this repository's Go code.
 
+You MUST read the `AGENTS.md` file in the project root.
+
 ## Repository Introduction
 - This is a Go-only repository.
 - Go code lives in the repository root (e.g. ./cmd, ./internal, ./pkg, ./main.go, etc).
