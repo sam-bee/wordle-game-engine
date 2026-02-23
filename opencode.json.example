@@ -1,0 +1,45 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "llama.cpp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8088/v1"
+      },
+      "models": {
+        "Qwen3-14B-Q5_K_M.gguf": {
+          "name": "Qwen3 Instruct (local)",
+          "limit": { "context": 32768, "output": 4096 }
+        }
+      }
+    },
+    "xai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "xAI (Grok)",
+      "options": {
+        "baseURL": "https://api.x.ai/v1",
+        "apiKey": "YOUR_API_KEY"
+      },
+      "models": {
+        "grok-4-1-fast": {
+          "name": "Grok 4.1 Fast",
+          "limit": { "context": 131072, "output": 8192 }
+        }
+      }
+    },
+  },
+  "mcp": {
+    "brave-search": {
+      "type": "local",
+      "command": ["npx", "-y", "@brave/brave-search-mcp-server"],
+      "enabled": true,
+      "environment": {
+        "BRAVE_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  },
+  "permission": {
+    "brave-search_*": "allow"
+  },
+}
