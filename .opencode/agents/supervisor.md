@@ -1,7 +1,8 @@
 ---
 description: The main orchestrator managing the Python and Go coders.
 mode: primary
-model: llama.cpp/Qwen3-14B-Q5_K_M.gguf
+# model: llama.cpp/Qwen3-14B-Q5_K_M.gguf
+model: xai/grok-4-1-fast
 tools:
   write: true
   edit: true
