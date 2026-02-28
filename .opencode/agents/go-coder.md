@@ -2,7 +2,7 @@
 name: go-coder
 description: Implement and refactor the Go Wordle engine in this repo.
 mode: subagent
-model: kimi-k2.5
+model: moonshot/kimi-k2.5
 tools:
   write: true
   edit: true

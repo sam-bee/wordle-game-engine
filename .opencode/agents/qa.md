@@ -2,7 +2,7 @@
 name: qa-requirements
 description: Verify that the implementation matches the requested behavior and acceptance criteria.
 mode: subagent
-model: kimi-k2.5
+model: moonshot/kimi-k2.5
 tools:
   write: false
   edit: false
