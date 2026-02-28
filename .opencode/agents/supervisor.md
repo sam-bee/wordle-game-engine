@@ -1,7 +1,8 @@
 ---
 description: The main orchestrator managing the Python and Go coders.
 mode: primary
-model: llama.cpp/gpt-oss-20b-F16.gguf
+model: kimi-k2.5
+# model: llama.cpp/gpt-oss-20b-F16.gguf
 # model: xai/grok-4-1-fast-reasoning
 tools:
   write: true

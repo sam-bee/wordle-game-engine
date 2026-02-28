@@ -2,8 +2,7 @@
 name: go-coder
 description: Implement and refactor the Go Wordle engine in this repo.
 mode: subagent
-model: llama.cpp/gpt-oss-20b-F16.gguf
-# model: xai/grok-4
+model: kimi-k2.5
 tools:
   write: true
   edit: true
