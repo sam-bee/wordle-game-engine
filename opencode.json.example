@@ -8,9 +8,9 @@
         "baseURL": "http://127.0.0.1:8088/v1"
       },
       "models": {
-        "Qwen3-14B-Q5_K_M.gguf": {
-          "name": "Qwen3 Instruct (local)",
-          "limit": { "context": 32768, "output": 4096 }
+        "gpt-oss-20b-F16.gguf": {
+          "name": "GPT OSS 20B F16",
+          "limit": { "context": 32768, "output": 8192 }
         }
       }
     },
@@ -19,15 +19,36 @@
       "name": "xAI (Grok)",
       "options": {
         "baseURL": "https://api.x.ai/v1",
-        "apiKey": "YOUR_API_KEY"
+        "apiKey": "[API KEY]"
       },
       "models": {
-        "grok-4-1-fast": {
+        "grok-4-1-fast-reasoning": {
           "name": "Grok 4.1 Fast",
+          "limit": { "context": 131072, "output": 8192 }
+        },
+        "grok-4": {
+          "name": "Grok 4",
           "limit": { "context": 131072, "output": 8192 }
         }
       }
     },
+    "moonshot": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Moonshot (Kimi)",
+      "options": {
+        "baseURL": "https://api.moonshot.ai/v1",
+        "apiKey": "[API KEY]"
+      },
+      "models": {
+        "kimi-k2.5": {
+          "name": "Kimi 2.5",
+          "limit": {
+            "context": 262144,
+            "output": 262144
+          }
+        }
+      }
+    }
   },
   "mcp": {
     "brave-search": {
@@ -35,7 +56,7 @@
       "command": ["npx", "-y", "@brave/brave-search-mcp-server"],
       "enabled": true,
       "environment": {
-        "BRAVE_API_KEY": "YOUR_API_KEY"
+        "BRAVE_API_KEY": "[API KEY]"
       }
     }
   },
