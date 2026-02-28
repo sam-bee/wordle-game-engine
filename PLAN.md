@@ -28,36 +28,53 @@ There will be a large, in-memory cache. It will be used for identifying the solu
 
 A Go wordle engine has been implemented in pkg/wordlegameengine. A lightweight HTTP server has been added in main.go, listening on port 9111 with /api/evaluate POST endpoint accepting JSON ({&quot;solution&quot;: &quot;...&quot;, &quot;turns&quot;: [...], &quot;proposed_guess&quot;: &quot;...&quot;}) and returning dummy JSON matching spec: {&quot;game_status&quot;: &quot;...&quot;, &quot;turn_valid&quot;: bool, &quot;shortlist_reduction&quot;: {&quot;before&quot;: int, &quot;after&quot;: int, &quot;ratio&quot;: float}, &quot;feedback&quot;: &quot;...&quot;}. Dummy validation (length/lowercase). Tests pass. No caching yet.
 
-## Current Iteration: Integrate Engine for Request Validation
+## Completed Iterations
+
+### ✅ Iteration 1: Integrate Engine for Request Validation
+
+**Status: COMPLETE**
+
+All acceptance criteria met:
+1. ✅ On startup, main.go calls wordlegameengine.LoadWordlists('./data'); log.Fatal if error.
+2. ✅ Import "./pkg/wordlegameengine" and "log".
+3. ✅ In evaluateHandler validates req.Solution, req.ProposedGuess, and req.Turns using engine
+4. ✅ Tests updated with 10 test cases covering real word/non-word validation
+5. ✅ `go test ./...` passes (25 tests total)
+6. ✅ Server responds 400 with descriptive error for invalid words
+
+## Current Iteration: Compute Real Game Status
 
 ### Acceptance Criteria
 
-1. On startup, main.go calls wordlegameengine.LoadWordlists('./data'); log.Fatal if error.
+1. Use `wordlegameengine.NewGame(solution)` to create a game instance in evaluateHandler.
 
-2. Import &quot;./pkg/wordlegameengine&quot; and &quot;log&quot;.
+2. For each turn in `req.Turns`:
+   - Call `game.MakeGuess(turn.Guess)` to apply the turn
+   - Verify the returned `Feedback.String()` matches `turn.Feedback` from the request
+   - If feedback doesn't match, return 400 with descriptive error
 
-3. In evaluateHandler:
-   - Validate req.Solution: w, err := wordlegameengine.NewSolution(req.Solution); if err != nil { http.Error(err.Error(), 400) }; w.Validate() same.
-   - If req.ProposedGuess != &quot;&quot;: same for NewWord(req.ProposedGuess).Validate()
-   - For each turn in req.Turns: NewWord(turn.Guess).Validate()
-   - Retain existing checks: solution/proposed/guess len==5 lowercase (but now superseded by New* ), feedback len==5.
-   - If all valid, set TurnValid = true in response, return dummy as before.
+3. Determine `game_status` based on game state after applying all turns:
+   - `"won"` if `game.IsWon()` is true
+   - `"lost"` if `game.IsLost()` is true (6 turns played and not won)
+   - `"ongoing"` otherwise
 
-4. Update tests to cover real word/non-word validation cases.
+4. Set `TurnValid = true` only if all guesses are valid AND feedbacks match.
 
 5. `go test ./...` passes.
 
-6. Server responds 400 with descriptive error for invalid words.
+6. Update/add tests for:
+   - Game won in 1-6 turns
+   - Game lost after 6 turns
+   - Game ongoing with 0-5 turns
+   - Feedback mismatch returns 400
 
 ### Tasks
 
-- [ ] **go-coder**: Implement the validation integration as per AC above. Run tests.
+- [ ] **go-coder**: Implement real game status computation using Game/MakeGuess/IsWon/IsLost. Run tests.
 
-- [ ] **qa-requirements**: Verify AC met, tests pass, validation uses engine correctly, dummy logic unchanged.
+- [ ] **qa-requirements**: Verify AC met, tests pass, game status computed correctly, feedback verification works.
 
 ## Future Iterations
-
-- Compute real game_status (won/lost/ongoing based on turns len and last feedback).
 
 - Compute real feedback for proposed_guess against solution.
 
